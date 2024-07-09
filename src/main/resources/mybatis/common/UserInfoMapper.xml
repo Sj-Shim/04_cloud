@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nh.innet.web.mapper.UserInfoMapper">
+	<insert id="addUserToManager" parameterType="map">
+		MERGE TB_DS_PV_MM_AMN AS amn
+		USING 
+		(
+			SELECT
+				EMPE_NO,
+				NAME
+			FROM
+				TB_DS_PV_MM_HUR
+			WHERE
+				EMPE_NO = #{empe_no}
+		) AS hur
+		ON
+			amn.EMPE_NO = hur.EMPE_NO
+		WHEN MATCHED
+		THEN
+			UPDATE SET 
+				EXP_DT = NULL
+		WHEN NOT MATCHED
+		THEN
+			INSERT
+			(
+				EMPE_NO,
+				NAME
+			)
+			VALUES
+			(
+				hur.EMPE_NO,
+				hur.NAME
+			);
+	</insert>
+
+	<update id="expireManager" parameterType="map">
+		UPDATE TB_DS_PV_MM_AMN
+		SET
+			EXP_DT = FORMAT(GETDATE(), 'yyyyMMdd')
+		WHERE
+			EMPE_NO = #{empe_no}
+	</update>
+
+	<select id="selectManagerList" parameterType="map" resultType="map">
+		
+	</select>
+</mapper>

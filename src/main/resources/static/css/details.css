@@ -1,0 +1,12 @@
+#grid { 
+    height: 400px;
+}
+#target_cnt {
+    font-size: 20px;
+    color: red;
+    background-color: yellow;
+    padding: 10px;
+}
+.file {
+	cursor : pointer;
+}

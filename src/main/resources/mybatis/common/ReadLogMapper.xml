@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nh.cloud.web.mapper.ReadLogMapper">
+	<select id="selectFilteredLog" parameterType="map" resultType="map">
+		WITH NumberedRows AS (
+			SELECT
+				ROW_NUMBER() OVER (ORDER BY hst.SONO_KEY_VAL ASC, hst.RG_DTM ASC) AS rn,
+				ISNULL(hur.NAME, hst.EMPE_NO) AS empe_name,
+				hst.SONO_KEY_VAL AS key_val,
+				fl.SONO_KEY_VAL AS fl_key,
+				hst.FLNM AS flnm,
+				fl.OTXT_FLNM AS otxt_flnm,
+				hst.PGMNM AS pgmnm,
+				hst.SYSNM AS sysnm,
+				hst.SNR_DSC AS snr_dsc,
+				FORMAT(hst.RG_DTM, 'yyyy-MM-dd HH:mm') AS rg_dtm, 
+				hst.HST_DSC AS hst_dsc,
+				hst.OBS_CNTN AS obs_cntn
+			FROM
+				TB_DS_PV_HI_CRINOT_HST AS hst
+				LEFT JOIN TB_DS_PV_MM_HUR AS hur
+						  ON hst.EMPE_NO = hur.EMPE_NO
+				LEFT JOIN TB_DS_PV_MM_FL fl
+						  ON ((hst.FLNM = fl.FLNM OR hst.FLNM = fl.OTXT_FLNM) AND hst.EMPE_NO = fl.EMPE_NO)
+			<where>
+				<if test='id != null and !"".equals(id)'>
+				AND (LOWER(hst.EMPE_NO) = LOWER(#{id}) OR LOWER(hur.NAME) = LOWER(#{id}))
+				</if>
+				<if test='st_dt != null and !"".equals(st_dt)'>
+				AND hst.RG_DTM >= #{st_dt}
+				</if>
+				<if test='ed_dt != null and !"".equals(ed_dt)'>
+				AND hst.RG_DTM <![CDATA[<=]]> DATEADD(day, 1, #{ed_dt})
+				</if>
+				<if test='hst_dsc != null and hst_dsc in (0, 1, 2)'>
+				AND hst.HST_DSC = #{hst_dsc}
+				</if>
+				<if test='file_name != null and !"".equals(file_name)'>
+				AND (hst.FLNM LIKE '%' + #{file_name} + '%' OR fl.OTXT_FLNM LIKE '%' + #{file_name} + '%')
+				</if>
+			</where>
+		)
+		SELECT 
+			*
+		FROM 
+			NumberedRows
+		ORDER BY 
+			rn DESC
+		OFFSET 
+			#{offset} ROWS
+		FETCH NEXT 
+			#{size} ROWS ONLY
+	</select>
+	
+	<select id="countHistories" resultType="int" parameterType="map">
+		SELECT 
+			COUNT(*)
+	    FROM 
+	    	TB_DS_PV_HI_CRINOT_HST AS hst
+	    	LEFT JOIN TB_DS_PV_MM_HUR AS hur
+	        	 ON hst.EMPE_NO = hur.EMPE_NO
+	    <where>
+	        <if test='id != null and !"".equals(id)'>
+	            AND (LOWER(hst.EMPE_NO) = LOWER(#{id}) OR LOWER(hur.NAME) = LOWER(#{id}))
+	        </if>
+	        <if test='st_dt != null and !"".equals(st_dt)'>
+	            AND hst.rg_dtm >= #{st_dt}
+	        </if>
+	        <if test='ed_dt != null and !"".equals(ed_dt)'>
+	            AND hst.rg_dtm <![CDATA[<=]]> DATEADD(day, 1, #{ed_dt})
+	        </if>
+	        <if test='hst_dsc != null and hst_dsc in (0, 1, 2)'>
+	            AND hst.hst_dsc = #{hst_dsc}
+	        </if>
+	        <if test='file_name != null and !"".equals(file_name)'>
+	            AND hst.flnm LIKE '%' + #{file_name} + '%'
+	        </if>
+	    </where>
+	</select>
+</mapper>

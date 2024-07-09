@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nh.cloud.common.fileinfo.mapper.FileInfoMapper">
+  	<insert id="insert"   parameterType="HashMap">
+	INSERT  INTO TB_DS_PV_MM_FL
+	(	EMPE_NO,       
+	    FL_STRG_PATHNM,
+	    FLNM,          
+	    OTXT_FLNM,     
+	    XCRNM,         
+	    SYSNM,         
+	    SNR_DSC   
+	) VALUES
+	(	#{empno        ,          jdbcType=VARCHAR},
+	    #{flstrgpathnm ,          jdbcType=VARCHAR},
+		#{flnm         ,          jdbcType=VARCHAR},
+		#{otxtflnm     ,          jdbcType=VARCHAR},
+		#{xcrnm        ,          jdbcType=VARCHAR},
+		#{sysnm        ,          jdbcType=VARCHAR},
+		#{snrdsc       ,          jdbcType=VARCHAR}
+	)	
+	</insert>
+	<update id="TB_DS_PV_MM_FL"  parameterType="HashMap" >
+        UPDATE   TB_IF_ORDER 
+        SET      UPLOAD_DTM       = now()
+        WHERE    flNm             = #{flNm,           jdbcType=VARCHAR}  
+    </update> 
+	
+	<select id="selectPagedFiles" parameterType="map" resultType="map">
+		WITH NumberedRows AS (
+			SELECT 
+				ROW_NUMBER() OVER (ORDER BY fl.SONO_KEY_VAL ASC, fl.UPLOAD_DTM ASC) AS rn,
+				fl.SONO_KEY_VAL AS fl_key,
+				ISNULL(hur.NAME, fl.EMPE_NO) AS empe_name,
+				fl.FL_STRG_PATHNM AS fl_strg_pathnm,
+				fl.FLNM AS flnm,
+				fl.OTXT_FLNM AS otxt_flnm,
+				fl.XCRNM AS xcrnm,
+				fl.SYSNM AS sysnm,
+				fl.SNR_DSC AS snr_dsc,
+				FORMAT(fl.UPLOAD_DTM, 'yyyy-MM-dd HH:mm') AS upload_dtm
+			FROM 
+				TB_DS_PV_MM_FL AS fl 
+				LEFT JOIN TB_DS_PV_MM_HUR AS hur 
+						  ON fl.EMPE_NO = hur.EMPE_NO
+			<where>
+				<if test='id != null and !"".equals(id)'>
+				AND (LOWER(fl.EMPE_NO) = LOWER(#{id}) OR LOWER(hur.NAME) = LOWER(#{id}))
+				</if>
+				<if test='st_dt != null and !"".equals(st_dt)'>
+				AND fl.upload_dtm >= #{st_dt}
+				</if>
+				<if test='ed_dt != null and !"".equals(ed_dt)'>
+				AND fl.upload_dtm <![CDATA[<=]]> DATEADD(day, 1, #{ed_dt})
+				</if>
+				<if test='ext != null and !"".equals(ext)'>
+				AND fl.xcrnm = #{ext}
+				</if>
+				<if test='file_name != null and !"".equals(file_name)'>
+				AND fl.flnm LIKE '%' + #{file_name} + '%'
+				</if>
+			</where>
+		)
+		SELECT 
+			*
+		FROM 
+			NumberedRows
+		ORDER BY 
+			rn DESC
+		OFFSET 
+			#{offset} ROWS
+		FETCH NEXT 
+			#{size} ROWS ONLY
+	</select>
+	
+	<select id="countFiles" resultType="int" parameterType="map">
+		SELECT COUNT(*)
+	    FROM TB_DS_PV_MM_FL AS fl
+	    LEFT JOIN TB_DS_PV_MM_HUR AS hur
+	        ON fl.EMPE_NO = hur.EMPE_NO
+	    <where>
+	        <if test='id != null and !"".equals(id)'>
+	            AND (LOWER(fl.EMPE_NO) = LOWER(#{id}) OR LOWER(hur.NAME) = LOWER(#{id}))
+	        </if>
+	        <if test='st_dt != null and !"".equals(st_dt)'>
+	            AND fl.upload_dtm >= #{st_dt}
+	        </if>
+	        <if test='ed_dt != null and !"".equals(ed_dt)'>
+	            AND fl.upload_dtm <![CDATA[<=]]> DATEADD(day, 1, #{ed_dt})
+	        </if>
+	        <if test='ext != null and !"".equals(ext)'>
+	            AND fl.xcrnm = #{ext}
+	        </if>
+	        <if test='file_name != null and !"".equals(file_name)'>
+	            AND fl.flnm LIKE '%' + #{file_name} + '%'
+	        </if>
+	    </where>
+	</select>
+	
+	<select id="selectAllXcrnm" resultType="String">
+		SELECT distinct 
+			XCRNM AS xcrnm 
+		FROM 
+			TB_DS_PV_MM_FL
+	</select>
+	<select id="getSelectedFileInfo" parameterType="map" resultType="map">
+		SELECT
+			fl.SONO_KEY_VAL AS fl_key,
+			COALESCE(hur.NAME, fl.EMPE_NO) AS empe_name,
+			fl.EMPE_NO AS empe_no,
+			fl.FL_STRG_PATHNM AS pathnm,
+			fl.FLNM AS flnm,
+			fl.OTXT_FLNM AS otxt_flnm,
+			fl.XCRNM AS xcrnm,
+			fl.SYSNM AS sysnm,
+			fl.SNR_DSC AS snr_dsc,
+			FORMAT(fl.UPLOAD_DTM, 'yyyy-MM-dd HH:mm:ss') AS upload_dtm
+		FROM
+			TB_DS_PV_MM_FL fl LEFT JOIN 
+			TB_DS_PV_MM_HUR hur 
+			ON fl.EMPE_NO = hur.EMPE_NO
+		WHERE
+			fl.SONO_KEY_VAL = #{key}
+	</select>
+</mapper>

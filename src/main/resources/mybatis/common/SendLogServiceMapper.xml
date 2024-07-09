@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nh.cloud.common.log.mapper.SendLogServiceMapper">
+  	<insert id="insert"   parameterType="HashMap">
+	INSERT  INTO TB_DS_PV_HI_CRINOT_HST
+	(	EMPE_NO,
+	    FLNM,
+		SYSNM,
+		PGMNM,
+		SNR_DSC,
+		HST_DSC,
+		OBS_CNTN
+	) VALUES
+	(   #{empno,         jdbcType=VARCHAR},
+	    #{flnm,          jdbcType=VARCHAR},
+		#{sysnm,         jdbcType=VARCHAR},
+		#{pgmnm,         jdbcType=VARCHAR},
+		#{snrdsc,        jdbcType=VARCHAR},
+		#{hstdsc,        jdbcType=VARCHAR},
+		#{obscntn,       jdbcType=VARCHAR}
+	)	
+	</insert>
+</mapper>

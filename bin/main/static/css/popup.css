@@ -1,0 +1,80 @@
+@charset "utf-8";
+
+
+body {}
+
+/* layout */
+#wrap {overflow: hidden;}
+#header {overflow: hidden; position: relative; margin: 0; padding: 20px 0 15px; font-family: 'Nanum Gothic', 'NanumGothic', '나눔고딕', Helvetica, 'Apple SD Gothic Neo', Sans-serif; color: #ffffff; background: url('../images/common/bg_gnb_on.png') repeat 0 0;}
+	a.pop_close {position: absolute; top: 23px; right: 15px; width: 20px; height: 19px; background: url('../images/popup/btn_delete.png') no-repeat 0 0;}
+	a.pop_close span {display: block; position: absolute; top: -999999px; right: -999999px;}
+
+#container {overflow: hidden;}
+	.content_area {overflow: hidden;}
+	    #content {overflow: hidden; padding: 40px 15px 50px;}
+
+
+
+
+/* title */
+.title_area {overflow: hidden; margin-bottom: 30px; font-family: 'Nanum Gothic', 'NanumGothic', '나눔고딕', Helvetica, 'Apple SD Gothic Neo', Sans-serif;}
+.title_area1 {overflow: hidden; margin-bottom: 15px; font-family: 'Nanum Gothic', 'NanumGothic', '나눔고딕', Helvetica, 'Apple SD Gothic Neo', Sans-serif;}
+h1.title {float: left; margin: 0 35px 0 0; padding-left: 37px; font-size: 18px; font-weight: bold; color: #ffffff; line-height: 1.4em; background: url('../images/popup/bullet_title_01.png') no-repeat 15px 6px;}
+h2.title {padding-left: 25px; font-weight: bold; font-size: 16px; color: #4d4d4d; background: url('../images/common/bullet_title_01.png') no-repeat 5px 2px;}
+h3.title {padding-left: 18px; font-weight: bold; font-size: 14px; color: #4d4d4d; background: url('../images/common/bullet_title_03.png') no-repeat 5px 4px;}
+
+
+/* tab_area */
+.tab_area {overflow: hidden; margin-bottom: 30px; background: url('../images/common/bg_tab_underline.png') repeat-x 0 bottom;}
+	ul.tablist {font-family: 'Nanum Gothic', 'NanumGothic', '나눔고딕', Helvetica, 'Apple SD Gothic Neo', Sans-serif;}
+		ul.tablist li {display: block; float: left; list-style: none;}
+		ul.tablist li a {display: block; height: 39px; padding: 0 20px; margin-bottom: 1px; border: 1px solid #dfdfdf; border-bottom: 0; font-weight: bold; font-size: 13px; color: #6e6e6e; line-height: 39px; letter-spacing: -0.02em; background-color: #f4f4f4;
+			border-top-left-radius: 8px;
+			border-top-right-radius: 8px;
+			-webkit-border-top-left-radius: 8px;
+			-webkit-border-top-right-radius: 8px;
+			-moz-border-top-left-radius: 8px;
+			-moz-border-top-right-radius: 8px;
+			}
+		ul.tablist li.on a {height: 38px; margin-bottom: 0px; border: 2px solid #0060af; border-bottom: 1px solid #ffffff; color: #3f3f3f; line-height: 39px; background-color: #ffffff;}
+		ul.tablist li.on a:hover {text-decoration: none;}
+
+
+/* table_search_area */
+.table_search_area {overflow: hidden; margin-bottom: 8px; font-family: 'Nanum Gothic', 'NanumGothic', '나눔고딕', Helvetica, 'Apple SD Gothic Neo', Sans-serif;}
+	.table_search_area.float_left {text-align: left;}
+	.table_search_area.float_right {text-align: right;}
+
+
+
+/*
+ * content
+ */
+.text_area {overflow: hidden; padding: 26px 20px 25px; border-top: 3px double #dddddd; border-bottom: 3px double #dddddd; font-family: 'Nanum Gothic', 'NanumGothic', '나눔고딕', Helvetica, 'Apple SD Gothic Neo', Sans-serif; font-weight: normal; font-size: 14px; color: #333333; line-height: 1.5em;}
+
+
+/* icon_choice */
+ul.icon_choice {overflow: hidden; padding: 1px 0 0 2px;}
+	ul.icon_choice li {float: left; width: 25%; list-style: none; margin: 5px 0; }
+	ul.icon_choice li .icon_box {overflow: hidden; padding: 10px 15px;}
+	ul.icon_choice li .icon_box input {display: inline; display: inline-block; vertical-align: top;}
+	ul.icon_choice li .icon_box img {
+		display: inline; display: inline-block; padding: 25px 21px; vertical-align: top; margin-left: 10px; background-color: #b6b6b6;
+		border-radius: 50px;
+		-webkit-border-radius: 50px;
+		-moz-border-radius: 50px;
+		}
+
+
+/* sms */
+.sms_area { overflow: hidden; padding: 18px 15px 5px; border: 1px solid #d7d7d7; font-size: 13px; }
+a.btn.sms_add { height: 25px; padding: 0 20px; border-radius: 0; font-size: 13px; line-height: 25px; }
+.box { display: inline-block; width: 220px; }
+.sms_list { width: 209px; height: 88px; border: 1px solid #969696; overflow-y: scroll; }
+.sms_list ul li { padding-left: 10px; font-family: '돋움', Dotum, Helvetica, 'Apple SD Gothic Neo', Sans-serif; font-size: 12px; line-height: 2.5em; list-style: none; }
+.sms_list ul li.on { background-color: #d7f2fc; }
+.sms_list ul li.off { background-color: none; }
+.sms_area .txt { padding-top: 39px; }
+.sms_content { font-size: 13px; }
+.tem_tbl_box { height: 500px; max-height: 500px; border-bottom: 2px solid #b6b6b6; overflow-y: auto; }
+.tem_m_tbl_box { height: 463px; max-height: 463px; border-bottom: 2px solid #b6b6b6; overflow-y: auto; }
